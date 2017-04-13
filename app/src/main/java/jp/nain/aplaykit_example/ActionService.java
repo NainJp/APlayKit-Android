@@ -16,8 +16,8 @@ import static jp.nain.aplaykit.APlayExtender.QUICK_RESPONSE_POSITIVE;
  */
 public class ActionService extends IntentService {
 
-    public String ACTION_VOICE_RECOGNITION = "jp.nain.aplaykit_example.ACTION_VOICE_RECOGNITION";
-    public String ACTION_QUICK_RESPONSE = "jp.nain.aplaykit_example.ACTION_QUICK_RESPONSE";
+    public static String ACTION_VOICE_RECOGNITION = "jp.nain.aplaykit_example.ACTION_VOICE_RECOGNITION";
+    public static String ACTION_QUICK_RESPONSE = "jp.nain.aplaykit_example.ACTION_QUICK_RESPONSE";
 
     public ActionService() {
         super(ActionService.class.getSimpleName());
@@ -39,25 +39,31 @@ public class ActionService extends IntentService {
         } else if (ACTION_QUICK_RESPONSE.equals(action)) {
             handleQuickResponseResult(result);
         } else {
-
+            // nothing
         }
     }
 
     private void handleVoiceRecognitionResult(Bundle result) {
         String resultText = result.getString(APlayExtender.ACTION_VOICE_RECOGNITION);
         Log.i("APlayKit", "VoiceRecognitionResult: "+resultText);
+        ActionEvent event = new ActionEvent(ActionEvent.Type.VOICE, "Voice \""+resultText+"\"");
+        ActionHistory.sharedInstance().addEvent(event);
     }
 
     private void handleQuickResponseResult(Bundle result) {
         String resultCode = result.getString(APlayExtender.ACTION_QUICK_RESPONSE);
         Log.i("APlayKit", "QuickResponseResult:"+resultCode);
+        ActionEvent event;
         if (QUICK_RESPONSE_POSITIVE.equals(resultCode)) {
-            // Do positive action
+            // Do your positive action
+            event = new ActionEvent(ActionEvent.Type.QUICK, "Quick ↑");
         } else if (QUICK_RESPONSE_NEGATIVE.equals(resultCode)) {
-            // Do negative action
+            // Do your negative action
+            event = new ActionEvent(ActionEvent.Type.VOICE, "Quick ↓");
         } else {
-
+            return;
         }
+        ActionHistory.sharedInstance().addEvent(event);
     }
 
 }

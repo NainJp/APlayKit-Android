@@ -14,7 +14,18 @@
     tools:showIn="@layout/activity_main">
 
     <TextView
+        android:id="@+id/text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/main_description"
+        android:textSize="12sp" />
+
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:id="@+id/list_view"
+        android:elevation = "2dp"
+        android:background="@android:color/background_light" />
+
+
 </RelativeLayout>

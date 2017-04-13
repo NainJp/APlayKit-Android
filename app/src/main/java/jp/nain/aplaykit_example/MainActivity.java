@@ -9,13 +9,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import jp.nain.aplaykit.APlayExtender;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActionHistory.UpdateListener {
+
+    ListView listView;
+    TextView textView;
+    ArrayAdapter<String> arrayAdapter;
+    ActionHistory history;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,72 +30,76 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        history = ActionHistory.sharedInstance();
+        history.setListener(this);
+
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, history.getEventContexts());
+
+        listView = (ListView) findViewById(R.id.list_view);
+        listView.setAdapter(arrayAdapter);
+
+        textView = (TextView) findViewById(R.id.text_view);
+        if (history.getEventContexts().isEmpty()) {
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.INVISIBLE);
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CharSequence title = "title";
-                CharSequence text = "text";
-                sendNotification(title, text);
+                sendNotification();
             }
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onUpdate(final ActionEvent event) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textView.setVisibility(View.INVISIBLE);
+                arrayAdapter.add(event.context);
+            }
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void sendNotification() {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void sendNotification(CharSequence title, CharSequence text) {
+        final CharSequence title = getString(R.string.notification_title);
+        final CharSequence text = getString(R.string.notification_text);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        Notification notification = builder.setSmallIcon(R.mipmap.ic_launcher)
+        Notification notification = builder.setSmallIcon(R.drawable.ic_notification_small)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .extend(getAPlayExtender())
                 .build();
-        NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.notify(1, notification);
     }
 
     private APlayExtender getAPlayExtender() {
 
         Intent voiceRecognitionIntent = new Intent(this, ActionService.class);
-        voiceRecognitionIntent.setAction("ACTION_VOICE_RECOGNITION");
+        voiceRecognitionIntent.setAction(ActionService.ACTION_VOICE_RECOGNITION);
         PendingIntent voiceRecognitionPendingIntent
                 = PendingIntent.getService(this, 0, voiceRecognitionIntent, 0);
 
         Intent quickResponseIntent = new Intent(this, ActionService.class);
-        quickResponseIntent.setAction("ACTION_QUICK_RESPONSE");
+        quickResponseIntent.setAction(ActionService.ACTION_QUICK_RESPONSE);
         PendingIntent quickResponsePendingIntent
                 = PendingIntent.getService(this, 0, quickResponseIntent, 0);
 
         return new APlayExtender()
-                .setGuidanceStart("今を記録しますか?")
-                .setGuidanceConfirm("「%s」と記録します")
-                .setGuidanceSuccess("記録しました")
-                .setGuidanceFailure("記録できませんでした")
-                .setMuteAppName(true)
-                .setPriorTicker(true)
+                .setGuidanceStart(getString(R.string.guidance_start))
+                .setGuidanceConfirm(getString(R.string.guidance_confirm))
+                .setGuidanceSuccess(getString(R.string.guidance_success))
+                .setGuidanceFailure(getString(R.string.guidance_failure))
                 .addVoiceRecognitionAction(voiceRecognitionPendingIntent)
                 .addQuickResponseAction(quickResponsePendingIntent);
     }
+
 }

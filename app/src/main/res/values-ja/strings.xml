@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">APlayKit</string>
+    <string name="notification_title">通知のタイトル</string>
+    <string name="notification_text">通知のテキスト</string>
+    <string name="guidance_start">このメッセージに応答できます</string>
+    <string name="guidance_confirm">「%s」と入力します</string>
+    <string name="guidance_success">応答しました</string>
+    <string name="guidance_failure">応答できませんでした</string>
+    <string name="main_description">ここにAPlayのイベント履歴が表示されます。\nAPlayを接続して右下のボタンを押してみましょう！</string>
+</resources>

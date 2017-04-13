@@ -32,7 +32,6 @@
                 <action android:name="jp.nain.aplay.ACTION_DISCONNECTED_EVENT" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>
