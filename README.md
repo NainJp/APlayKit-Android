@@ -1,6 +1,6 @@
 # APlayKit-Android
 
-APlayKit is a softwar developers kit for the hearable device "APlay". APlay let you notify information by voice from any apps. APlayKit can customise the notification and to enable receiving the intent like connection or user initiation events.
+APlayKit is a software developers kit for the hearable device "APlay". APlay let you notify information by voice from any apps. APlayKit can customise the notification and to enable receiving the intent like connection or user initiation events.
 
 ## Requisites
 
@@ -22,12 +22,12 @@ dependencies {
 
 ### Customising Voice Notification
 
-These are custmizable guidance when APlay read out notification:
+These are customizable guidance when APlay read out notification:
 
 
 - Guidance about starting voice input
 - Confirmation input result
-- Success / Failue status for notification action
+- Success / Failure status for notification action
 
 You need to set just only NotificationCompat.Builder of Android API
 
@@ -52,7 +52,7 @@ You need to set just only NotificationCompat.Builder of Android API
 
 ### Handling User Action Callbacks
 
-Your app can receive user action about APlay oparation:
+Your app can receive user action about APlay operation:
 
 - Result of voice input with text
 - Event of quick response
@@ -90,7 +90,7 @@ To acquire events about APlay:
 
 - APlay connection
 - APlay disconnection
-- Call the app by user initiaion
+- Call the app by user initiation
 
 You have to describe Android Manifest to be called.
 
