@@ -4,8 +4,9 @@ APlayKit is a software developers kit for the hearable device "APlay". APlay let
 
 ## Requisites
 
-- Phone : Android 5.0~ (Supported Bluetooth Low Energy: BLE)
-- APlay device : NA1, NA1L http://www.nain.jp/aplay/
+- Phone : Android 5.0 (Lollipop, API level 21) or later (of course Bluetooth function is supported)
+- APlay app : v1.8.0 or later [ https://play.google.com/store/apps/details?id=jp.nain.speaker ]
+- APlay device : NA1, NA1L [ http://www.nain.jp/aplay/ ]
 
 
 ## Get started
@@ -29,7 +30,7 @@ These are customizable guidance when APlay read out notification:
 - Confirmation input result
 - Success / Failure status for notification action
 
-You need to set just only NotificationCompat.Builder of Android API
+You need to extend just only NotificationCompat.Builder of Android API
 
 ```Java
 APlayExtender ext = new APlayExtender()
