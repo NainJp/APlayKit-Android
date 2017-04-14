@@ -8,6 +8,7 @@ APlayKit is a software developers kit for the hearable device "APlay". APlay let
 - APlay app : v1.8.0 or later [ https://play.google.com/store/apps/details?id=jp.nain.speaker ]
 - APlay device : NA1, NA1L [ http://www.nain.jp/aplay/ ]
 
+:point_right: Please note that there is a possibility to change because of the still α version.
 
 ## Get started
 
@@ -77,8 +78,8 @@ Notification notification = builder.setSmallIcon(R.drawable.ic_notification_smal
         .setContentTitle("Tile")
         .setContentText("Body")
         .setPriority(Notification.PRIORITY_HIGH)
-        .extend(ext)
-        .build();
+        .extend(ext) // ★
+        .build();
 ```
 
 ### Receiving APlay Events
