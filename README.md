@@ -14,7 +14,7 @@ You can get library from JCenter.
 
 ``` Gradle
 dependencies {
-	compile 'jp.nain:aplaykit:0.1.0'
+    compile 'jp.nain:aplaykit:0.1.0'
 }
 ```
 
@@ -32,21 +32,19 @@ These are custmizable guidance when APlay read out notification:
 You need to set just only NotificationCompat.Builder of Android API
 
 ```Java
+APlayExtender ext = new APlayExtender()
+        .setGuidanceStart("Start") // start voice input 
+        .setGuidanceConfirm("Confirmation:%s") // confirm result of voice input
+        .setGuidanceSuccess("Succeeded")  // action success
+        .setGuidanceFailure("Failed"); // action failure
 
-	APlayExtender ext = new APlayExtender()
-		.setGuidanceStart("Start") // start voice input 
-		.setGuidanceConfirm("Confirmation:%s") // confirm result of voice input
-		.setGuidanceSuccess("Succeeded")  // action success
-		.setGuidanceFailure("Failed"); // action failure
-                
-	NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-	Notification notification = builder.setSmallIcon(R.drawable.ic_notification_small)
-                .setContentTitle("Title")
-                .setContentText("Body")
-                .setPriority(Notification.PRIORITY_HIGH)
-                .extend(ext) // ★
-                .build();
-
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+Notification notification = builder.setSmallIcon(R.drawable.ic_notification_small)
+        .setContentTitle("Title")
+        .setContentText("Body")
+        .setPriority(Notification.PRIORITY_HIGH)
+        .extend(ext) // ★
+        .build();
 ```
 
 
@@ -58,30 +56,28 @@ Your app can receive user action about APlay oparation:
 - Event of quick response
 
 ```Java
+// Prepare to receive intent about voice input
+Intent voiceRecognitionIntent = new Intent(this, ActionService.class);
+voiceRecognitionIntent.setAction(ActionService.ACTION_VOICE_RECOGNITION);
+PendingIntent voiceRecognitionPendingIntent = PendingIntent.getService(this, 0, voiceRecognitionIntent, 0);
 
-	// Prepare to receive intent about voice input
-	Intent voiceRecognitionIntent = new Intent(this, ActionService.class);
-	voiceRecognitionIntent.setAction(ActionService.ACTION_VOICE_RECOGNITION);
-	PendingIntent voiceRecognitionPendingIntent = PendingIntent.getService(this, 0, voiceRecognitionIntent, 0);
-	
-	// Prepare to receive intent about quick response
-	Intent quickResponseIntent = new Intent(this, ActionService.class);
-	quickResponseIntent.setAction(ActionService.ACTION_QUICK_RESPONSE);
-	PendingIntent quickResponsePendingIntent = PendingIntent.getService(this, 0, quickResponseIntent, 0);
+// Prepare to receive intent about quick response
+Intent quickResponseIntent = new Intent(this, ActionService.class);
+quickResponseIntent.setAction(ActionService.ACTION_QUICK_RESPONSE);
+PendingIntent quickResponsePendingIntent = PendingIntent.getService(this, 0, quickResponseIntent, 0);
 
 
-	APlayExtender ext = new APlayExtender()
-		.addVoiceRecognitionAction(voiceRecognitionPendingIntent) // Set Intent for voice input
-		.addQuickResponseAction(quickResponsePendingIntent); // Set Intent for quick action
-                
-	NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-	Notification notification = builder.setSmallIcon(R.drawable.ic_notification_small)
-                .setContentTitle("Tile")
-                .setContentText("Body")
-                .setPriority(Notification.PRIORITY_HIGH)
-                .extend(ext)
-                .build();
-
+APlayExtender ext = new APlayExtender()
+        .addVoiceRecognitionAction(voiceRecognitionPendingIntent) // Set Intent for voice input
+        .addQuickResponseAction(quickResponsePendingIntent); // Set Intent for quick action
+            
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+Notification notification = builder.setSmallIcon(R.drawable.ic_notification_small)
+        .setContentTitle("Tile")
+        .setContentText("Body")
+        .setPriority(Notification.PRIORITY_HIGH)
+        .extend(ext)
+        .build();
 ```
 
 ### Receiving APlay Events
@@ -95,22 +91,18 @@ To acquire events about APlay:
 You have to describe Android Manifest to be called.
 
 ```AndroidManifest.xml
-
-	<receiver
-	    android:name=".APlayEventReceiver"
-	    android:exported="true">
-	    <intent-filter>
-	        <action android:name="jp.nain.aplay.ACTION_CALL_EVENT" />
-	        <action android:name="jp.nain.aplay.ACTION_CONNECTED_EVENT" />
-	        <action android:name="jp.nain.aplay.ACTION_DISCONNECTED_EVENT" />
-	    </intent-filter>
-	</receiver>
-
-
+<receiver
+    android:name=".APlayEventReceiver"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="jp.nain.aplay.ACTION_CALL_EVENT" />
+        <action android:name="jp.nain.aplay.ACTION_CONNECTED_EVENT" />
+        <action android:name="jp.nain.aplay.ACTION_DISCONNECTED_EVENT" />
+    </intent-filter>
+</receiver>
 ```
 
 ```Java
-
 public class APlayEventReceiver extends EventReceiver {
 
     @Override
@@ -129,7 +121,6 @@ public class APlayEventReceiver extends EventReceiver {
         // Do custom launch action
     }
 }
-
 ```
 
 ## License
